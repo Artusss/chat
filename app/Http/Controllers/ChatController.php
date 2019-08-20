@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Chat;
+use App\Http\Requests\PostAddChatRequest;
+use App\Http\Requests\PostGetChatRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
-    public function get(Request $request)
+    public function get(PostGetChatRequest $request)
     {
-        $last_message_query = "(SELECT `chat_id` AS `chat`, MAX(`created_at`) as `last_message_created` FROM `messages` GROUP BY `chat`) `last_message`";
+        $last_message_query = "(SELECT `chat`, MAX(`created_at`) as `last_message_created` FROM `messages` GROUP BY `chat`) `last_message`";
         $chats = DB::table('user_chat')->select('chat_id', 'name', 'created_at')
             ->join('chats', 'chats.id', '=', 'user_chat.chat_id')
             ->leftJoin(
@@ -22,7 +24,7 @@ class ChatController extends Controller
         return response()->json(['data' => $chats->toArray()], 200);
     }
 
-    public function add(Request $request)
+    public function add(PostAddChatRequest $request)
     {
         $chat = new Chat;
         $chat->name = $request->name;

@@ -13,15 +13,15 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        //id, chat_id, author_id, text, timestamps
+        //id, chat, author, text, timestamps
         Schema::create('messages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('chat_id')->unsigned();
-            $table->foreign('chat_id')
+            $table->bigInteger('chat')->unsigned();
+            $table->foreign('chat')
                 ->references('id')->on('chats')
                 ->onDelete('cascade');
-            $table->bigInteger('author_id')->unsigned();
-            $table->foreign('author_id')
+            $table->bigInteger('author')->unsigned();
+            $table->foreign('author')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
             $table->text('text');
